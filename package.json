@@ -1,7 +1,7 @@
 {
     "name"        : "grunt-diff",
     "description" : "Run tasks only when target files change.",
-    "version"     : "0.1.1",
+    "version"     : "0.1.2",
     "homepage"    : "https://github.com/aioutecism/grunt-diff",
     "author"      : {
         "name" : "aioute Gao"

@@ -44,42 +44,50 @@ module.exports = function (grunt) {
         mkdirp.sync(SETTING.hashFile.replace(/[^\/]+\.json$/, ''));
 
         var hashes = fs.existsSync(SETTING.hashFile) ?
-            JSON.parse(fs.readFileSync(SETTING.hashFile, 'utf8')) : {};
+            grunt.file.readJSON(SETTING.hashFile, 'utf8') : {};
 
         hashes[target] = hashes[target] || {};
 
-        var filePathes   = [];
-        var filesChanged = [];
-        var filesRemoved = [];
+        var src = [];
+
+        if (me.data.refer) {
+            var refer = me.data.refer.replace(/:/g, '.');
+            var files = grunt.task.normalizeMultiTaskFiles(grunt.config.get(refer));
+            files.forEach(function (file) {
+                Array.prototype.push.apply(src, file.src);
+            });
+        }
+        else {
+            src = me.filesSrc;
+        }
+
+        src = src.filter(function (path) {
+            if (! grunt.file.exists(path)) {
+                grunt.log.warn('Source file "' + path + '" not found.');
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
 
         // Check for changes
-        me.files.forEach(function (f) {
-            var src = f.src.filter(function (path) {
-                if (! grunt.file.exists(path)) {
-                    grunt.log.warn('Source file "' + path + '" not found.');
-                    return false;
-                } else {
-                    return true;
-                }
-            });
+        var filesChanged = src.filter(function (path) {
+            var hash = crypto.createHash(options.algorithm).update(grunt.file.read(path), options.encoding).digest('hex');
 
-            src.map(function (path) {
-                var hash = crypto.createHash(options.algorithm).update(grunt.file.read(path), options.encoding).digest('hex');
-
-                if (hash === hashes[target][path]) {
-                    return;
-                }
-
+            if (hash !== hashes[target][path]) {
                 hashes[target][path] = hash;
-                filesChanged.push(path);
-            });
-
-            Array.prototype.push.apply(filePathes, src);
+                return true;
+            }
+            else {
+                return false;
+            }
         });
 
         // Check for removals
+        var filesRemoved = [];
         for (var path in hashes[target]) {
-            if (!~filePathes.indexOf(path)) {
+            if (!~src.indexOf(path)) {
                 delete hashes[target][path];
                 filesRemoved.push(path);
             }

@@ -63,4 +63,18 @@ exports.diff = {
 
         test.done();
     },
+    refer: function(test) {
+        var actual, expected;
+        test.expect(2);
+
+        actual   = grunt.file.read(PATH.actual + '/refer/1');
+        expected = grunt.file.read(PATH.expected + '/refer/1');
+        test.equal(actual, expected, 'Refered file change detected: 1.');
+
+        actual   = grunt.file.read(PATH.actual + '/refer/2');
+        expected = grunt.file.read(PATH.expected + '/refer/2');
+        test.equal(actual, expected, 'Refered file change detected: 2.');
+
+        test.done();
+    },
 };

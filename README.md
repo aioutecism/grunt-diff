@@ -37,6 +37,10 @@ grunt.initConfig({
       files : [ 'lib/*.js' ],
       tasks : [ 'concat', 'uglify' ],
     },
+    sass : {
+      refer : 'sass:dist',
+      tasks : 'sass:dist',
+    },
   },
 });
 ```
@@ -98,6 +102,11 @@ grunt.initConfig({
         'taskToRun2',
       ],
     },
+
+    refer : {
+      refer : 'task:target',
+      tasks : [ 'taskToRun' ],
+    },
   },
 });
 ```
@@ -115,5 +124,6 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+ * 2014-02-10   v0.1.2   Refer to task:target's files
  * 2014-02-10   v0.1.1   Check file removal
  * 2014-02-10   v0.1.0   Release

@@ -68,6 +68,15 @@ module.exports = function (grunt) {
                 src  : '<%= path.tmp %>/multitask1',
                 dest : '<%= path.tmp %>/multitask2'
             },
+
+            refer : {
+                files : [{
+                    expand : true,
+                    cwd    : '<%= path.test %>/refer/',
+                    src    : [ '**/*' ],
+                    dest   : '<%= path.tmp %>/refer/',
+                }],
+            },
         },
 
         diff : {
@@ -100,6 +109,11 @@ module.exports = function (grunt) {
                     'copy:multitask1',
                     'copy:multitask2',
                 ],
+            },
+
+            refer : {
+                refer : 'copy:refer',
+                tasks : 'copy:refer',
             },
         },
 
