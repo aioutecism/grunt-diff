@@ -8,47 +8,100 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     grunt.initConfig({
-        jshint: {
-            all: [
+
+        path : {
+            test : 'test/fixtures',
+            tmp  : 'tmp',
+        },
+
+        jshint : {
+            all : [
                 'Gruntfile.js',
                 'tasks/*.js',
                 '<%= nodeunit.tests %>',
             ],
-            options: {
-                jshintrc: '.jshintrc',
+            options : {
+                jshintrc : '.jshintrc',
             },
         },
 
-        clean: {
-            tests: ['tmp'],
+        clean : {
+            tests : [ '<%= path.tmp %>' ],
         },
 
-        diff: {
-            default_options: {
-                options: {
-                },
-                files: {
-                    'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123'],
-                },
+        copy : {
+            single : {
+                src  : '<%= path.test %>/single',
+                dest : '<%= path.tmp %>/single',
             },
-            custom_options: {
-                options: {
-                    separator: ': ',
-                    punctuation: ' !!!',
-                },
-                files: {
-                    'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123'],
-                },
+
+            pattern : {
+                files : [{
+                    expand : true,
+                    cwd    : '<%= path.test %>/pattern/',
+                    src    : [ '**/*' ],
+                    dest   : '<%= path.tmp %>/pattern/',
+                }],
+            },
+
+            chained : {
+                files : [{
+                    expand : true,
+                    cwd    : '<%= path.tmp %>/pattern/',
+                    src    : [ '**/*' ],
+                    dest   : '<%= path.tmp %>/chained/',
+                }],
+            },
+
+            multitask1 : {
+                src  : '<%= path.test %>/multitask',
+                dest : '<%= path.tmp %>/multitask1'
+            },
+            multitask2 : {
+                src  : '<%= path.tmp %>/multitask1',
+                dest : '<%= path.tmp %>/multitask2'
             },
         },
 
-        nodeunit: {
-            tests: ['test/*_test.js'],
+        diff : {
+            single : {
+                src   : '<%= path.test %>/single',
+                tasks : [ 'copy:single' ],
+            },
+
+            pattern : {
+                files : [{
+                    expand : true,
+                    cwd    : '<%= path.test %>/pattern/',
+                    src    : [ '**/*' ],
+                }],
+                tasks : [ 'copy:pattern' ],
+            },
+
+            chained : {
+                files : [{
+                    expand : true,
+                    cwd    : '<%= path.tmp %>/pattern/',
+                    src    : [ '**/*' ],
+                }],
+                tasks : [ 'copy:chained' ],
+            },
+
+            multitask : {
+                src   : '<%= path.test %>/multitask',
+                tasks : [
+                    'copy:multitask1',
+                    'copy:multitask2',
+                ],
+            },
         },
 
+        nodeunit : {
+            tests : [ 'test/*_test.js' ],
+        },
     });
 
     // Actually load this plugin's task(s).
@@ -56,9 +109,18 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-nodeunit');
 
-    grunt.registerTask('test', ['clean', 'diff', 'nodeunit']);
-    grunt.registerTask('default', ['jshint', 'test']);
+    grunt.registerTask('test', [
+        'clean',
+        'diff',
+        'nodeunit'
+    ]);
+
+    grunt.registerTask('default', [
+        'jshint',
+        'test'
+    ]);
 
 };
