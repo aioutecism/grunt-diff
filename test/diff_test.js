@@ -2,46 +2,64 @@
 
 var grunt = require('grunt');
 
-/*
-    ======== A Handy Little Nodeunit Reference ========
-    https://github.com/caolan/nodeunit
-
-    Test methods:
-        test.expect(numAssertions)
-        test.done()
-    Test assertions:
-        test.ok(value, [message])
-        test.equal(actual, expected, [message])
-        test.notEqual(actual, expected, [message])
-        test.deepEqual(actual, expected, [message])
-        test.notDeepEqual(actual, expected, [message])
-        test.strictEqual(actual, expected, [message])
-        test.notStrictEqual(actual, expected, [message])
-        test.throws(block, [error], [message])
-        test.doesNotThrow(block, [error], [message])
-        test.ifError(value)
-*/
+var PATH = {
+    actual   : 'tmp',
+    expected : 'test/fixtures',
+};
 
 exports.diff = {
     setUp: function(done) {
-        // setup here if necessary
         done();
     },
-    default_options: function(test) {
+    single: function(test) {
+        var actual, expected;
         test.expect(1);
 
-        var actual = grunt.file.read('tmp/default_options');
-        var expected = grunt.file.read('test/expected/default_options');
-        test.equal(actual, expected, 'should describe what the default behavior is.');
+        actual   = grunt.file.read(PATH.actual + '/single');
+        expected = grunt.file.read(PATH.expected + '/single');
+        test.equal(actual, expected, 'Single file change detected.');
 
         test.done();
     },
-    custom_options: function(test) {
-        test.expect(1);
+    pattern: function(test) {
+        var actual, expected;
+        test.expect(2);
 
-        var actual = grunt.file.read('tmp/custom_options');
-        var expected = grunt.file.read('test/expected/custom_options');
-        test.equal(actual, expected, 'should describe what the custom option(s) behavior is.');
+        actual   = grunt.file.read(PATH.actual + '/pattern/1');
+        expected = grunt.file.read(PATH.expected + '/pattern/1');
+        test.equal(actual, expected, 'Matched file change detected: 1.');
+
+        actual   = grunt.file.read(PATH.actual + '/pattern/2');
+        expected = grunt.file.read(PATH.expected + '/pattern/2');
+        test.equal(actual, expected, 'Matched file change detected: 2.');
+
+        test.done();
+    },
+    chained: function(test) {
+        var actual, expected;
+        test.expect(2);
+
+        actual   = grunt.file.read(PATH.actual + '/chained/1');
+        expected = grunt.file.read(PATH.expected + '/pattern/1');
+        test.equal(actual, expected, 'Chained file change detected: 1.');
+
+        actual   = grunt.file.read(PATH.actual + '/chained/2');
+        expected = grunt.file.read(PATH.expected + '/pattern/2');
+        test.equal(actual, expected, 'Chained file change detected: 2.');
+
+        test.done();
+    },
+    multitask: function(test) {
+        var actual, expected;
+        test.expect(2);
+
+        expected = grunt.file.read(PATH.expected + '/multitask');
+
+        actual = grunt.file.read(PATH.actual + '/multitask1');
+        test.equal(actual, expected, 'First task runned.');
+
+        actual = grunt.file.read(PATH.actual + '/multitask2');
+        test.equal(actual, expected, 'Second task runned.');
 
         test.done();
     },

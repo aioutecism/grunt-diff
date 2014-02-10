@@ -8,42 +8,77 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+var fs     = require('fs');
+var crypto = require('crypto');
+var chalk  = require('chalk');
 
-    // Please see the Grunt documentation for more information regarding task
-    // creation: http://gruntjs.com/creating-tasks
+var SETTING = {
+    hashFile : '.grunt/grunt-diff/hash.json',
+};
 
-    grunt.registerMultiTask('diff', 'Run tasks only when target files change.', function() {
-        // Merge task-specific and/or target-specific options with these defaults.
-        var options = this.options({
-            punctuation: '.',
-            separator: ', '
+module.exports = function (grunt) {
+
+    grunt.registerTask('diff:flush', "Flush saved hashes.", function () {
+        var me = this;
+
+        if (! fs.existsSync(SETTING.hashFile)) {
+            grunt.log.writeln(chalk.gray("Nothing to flush."));
+            return;
+        }
+
+        fs.unlinkSync(SETTING.hashFile);
+
+        grunt.log.writeln(chalk.green('✔ ') + "All hashes flushed.");
+    });
+
+    grunt.registerMultiTask('diff', "Run tasks only when target files change.", function () {
+        var me = this;
+
+        var options = me.options({
+            algorithm : 'md5',
+            encoding  : 'utf8',
         });
 
-        // Iterate over all specified file groups.
-        this.files.forEach(function(f) {
-            // Concat specified files.
-            var src = f.src.filter(function(filepath) {
-                // Warn on and remove invalid source files (if nonull was set).
-                if (!grunt.file.exists(filepath)) {
-                    grunt.log.warn('Source file "' + filepath + '" not found.');
+        var hashes = fs.existsSync(SETTING.hashFile) ?
+            JSON.parse(fs.readFileSync(SETTING.hashFile, 'utf8')) : {};
+
+        var filesChanged = [];
+
+        me.files.forEach(function (f) {
+            var src = f.src.filter(function (path) {
+                if (! grunt.file.exists(path)) {
+                    grunt.log.warn('Source file "' + path + '" not found.');
                     return false;
                 } else {
                     return true;
                 }
-            }).map(function(filepath) {
-                // Read file source.
-                return grunt.file.read(filepath);
-            }).join(grunt.util.normalizelf(options.separator));
+            });
 
-            // Handle options.
-            src += options.punctuation;
+            src.map(function (path) {
+                var hash = crypto.createHash(options.algorithm).update(grunt.file.read(path), options.encoding).digest('hex');
 
-            // Write the destination file.
-            grunt.file.write(f.dest, src);
+                if (hash === hashes[path]) {
+                    return;
+                }
 
-            // Print a success message.
-            grunt.log.writeln('File "' + f.dest + '" created.');
+                hashes[path] = hash;
+                filesChanged.push(path);
+            });
+        });
+
+        if (! filesChanged.length) {
+            grunt.log.writeln(chalk.gray("No change."));
+            return;
+        }
+
+        grunt.task.run(me.data.tasks);
+
+        grunt.log.writeln(chalk.yellow("Changes detacted:\n") + filesChanged.map(function (path) {
+            return chalk.gray(' - ') + path;
+        }).join("\n"));
+
+        fs.writeFileSync(SETTING.hashFile, JSON.stringify(hashes), {
+            encoding : 'utf8',
         });
     });
 

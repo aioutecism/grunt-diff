@@ -13,8 +13,9 @@ module.exports = function (grunt) {
     grunt.initConfig({
 
         path : {
-            test : 'test/fixtures',
-            tmp  : 'tmp',
+            test     : 'test/fixtures',
+            tmp      : 'tmp',
+            hashFile : '.grunt/grunt-diff/hash.json',
         },
 
         jshint : {
@@ -29,7 +30,10 @@ module.exports = function (grunt) {
         },
 
         clean : {
-            tests : [ '<%= path.tmp %>' ],
+            tests : [
+                '<%= path.tmp %>',
+                '<%= path.hashFile %>',
+            ],
         },
 
         copy : {

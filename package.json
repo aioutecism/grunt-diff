@@ -6,36 +6,39 @@
     "author"      : {
         "name" : "aioute Gao"
     },
-    "repository": {
+    "repository" : {
         "type" : "git",
         "url"  : "git://github.com/aioutecism/grunt-diff.git"
     },
-    "bugs": {
+    "bugs" : {
         "url" : "https://github.com/aioutecism/grunt-diff/issues"
     },
-    "licenses": [
+    "licenses" : [
         {
             "type" : "MIT",
             "url"  : "https://github.com/aioutecism/grunt-diff/blob/master/LICENSE-MIT"
         }
     ],
-    "engines": {
+    "engines" : {
         "node" : ">= 0.8.0"
     },
-    "scripts": {
+    "scripts" : {
         "test" : "grunt test"
     },
-    "devDependencies": {
+    "dependencies" : {
+        "chalk" : "~0.4.0"
+    },
+    "devDependencies" : {
         "grunt"                  : "~0.4.2",
         "grunt-contrib-jshint"   : "~0.6.0",
         "grunt-contrib-clean"    : "~0.4.0",
         "grunt-contrib-copy"     : "~0.5.0",
         "grunt-contrib-nodeunit" : "~0.2.0"
     },
-    "peerDependencies": {
+    "peerDependencies" : {
         "grunt" : "~0.4.0"
     },
-    "keywords": [
+    "keywords" : [
         "gruntplugin",
         "diff",
         "different",
