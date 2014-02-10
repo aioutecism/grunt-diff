@@ -56,6 +56,7 @@ module.exports = function (grunt) {
             files.forEach(function (file) {
                 Array.prototype.push.apply(src, file.src);
             });
+            me.data.tasks = me.data.tasks || me.data.refer;
         }
         else {
             src = me.filesSrc;

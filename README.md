@@ -106,6 +106,8 @@ grunt.initConfig({
     refer : {
       refer : 'task:target',
       tasks : [ 'taskToRun' ],
+      // 'tasks' can be omited when using 'refer'.
+      // Defaults to the refered 'task:target'.
     },
   },
 });
@@ -124,6 +126,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+ * 2014-02-10   v0.1.3   Default refer tasks
  * 2014-02-10   v0.1.2   Refer to task:target's files
  * 2014-02-10   v0.1.1   Check file removal
  * 2014-02-10   v0.1.0   Release

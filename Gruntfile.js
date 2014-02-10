@@ -113,7 +113,6 @@ module.exports = function (grunt) {
 
             refer : {
                 refer : 'copy:refer',
-                tasks : 'copy:refer',
             },
         },
 
