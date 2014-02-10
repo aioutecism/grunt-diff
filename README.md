@@ -105,7 +105,6 @@ grunt.initConfig({
 
 ## TODO
 
- * Check for removal
  * Improve test coverage
 
 
@@ -116,4 +115,5 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
+ * 2014-02-10   v0.1.1   Check file removal
  * 2014-02-10   v0.1.0   Release
