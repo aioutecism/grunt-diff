@@ -9,6 +9,7 @@
 'use strict';
 
 var fs     = require('fs');
+var mkdirp = require('mkdirp');
 var crypto = require('crypto');
 var chalk  = require('chalk');
 
@@ -38,6 +39,8 @@ module.exports = function (grunt) {
             algorithm : 'md5',
             encoding  : 'utf8',
         });
+
+        mkdirp.sync(SETTING.hashFile.replace(/[^\/]+\.json$/, ''));
 
         var hashes = fs.existsSync(SETTING.hashFile) ?
             JSON.parse(fs.readFileSync(SETTING.hashFile, 'utf8')) : {};

@@ -26,7 +26,8 @@
         "test" : "grunt test"
     },
     "dependencies" : {
-        "chalk" : "~0.4.0"
+        "mkdirp" : "~0.3.5",
+        "chalk"  : "~0.4.0"
     },
     "devDependencies" : {
         "grunt"                  : "~0.4.2",
