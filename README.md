@@ -34,7 +34,7 @@ You might like to add `.grunt` to your `.gitignore`.
 grunt.initConfig({
   diff : {
     javascript : {
-      files : [ 'lib/*.js' ],
+      src   : [ 'lib/*.js' ],
       tasks : [ 'concat', 'uglify' ],
     },
     sass : {
