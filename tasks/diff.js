@@ -63,6 +63,9 @@ module.exports = function (grunt) {
         }
 
         src = src.filter(function (path) {
+            if (! grunt.file.isFile(path)) {
+                return false;
+            }
             if (! grunt.file.exists(path)) {
                 grunt.log.warn('Source file "' + path + '" not found.');
                 return false;

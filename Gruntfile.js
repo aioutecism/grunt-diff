@@ -114,6 +114,11 @@ module.exports = function (grunt) {
             refer : {
                 refer : 'copy:refer',
             },
+
+            nonFile : {
+                src   : '<%= path.test %>',
+                tasks : [],
+            },
         },
 
         nodeunit : {
