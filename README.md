@@ -126,7 +126,7 @@ In lieu of a formal styleguide, take care to maintain the existing coding style.
 
 ## Release History
 
- * 2014-02-10   v0.1.4   Skip non-file paths
+ * 2014-02-10   v0.1.5   Skip non-file paths
  * 2014-02-10   v0.1.3   Default refer tasks
  * 2014-02-10   v0.1.2   Refer to task:target's files
  * 2014-02-10   v0.1.1   Check file removal
