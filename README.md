@@ -1,3 +1,5 @@
+# PLEASE USE [grunt-newer](https://github.com/tschaub/grunt-newer) INSTEAD!!!
+
 # grunt-diff
 
 > Run tasks only if target file changed.
